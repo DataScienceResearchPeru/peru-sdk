@@ -21,6 +21,8 @@ class Server:
     def __init__(self, callback):
         class Handler(BaseHTTPRequestHandler):
             def do_POST(self):
+                # Consume the request before replying so close cannot reset an unread body.
+                self.request_body = self.rfile.read(int(self.headers.get("Content-Length", "0")))
                 callback(self)
 
             def log_message(self, *args):
@@ -43,6 +45,7 @@ class Server:
 def respond(handler, body=ACCEPTED, status=200):
     handler.send_response(status)
     handler.send_header("Content-Type", "application/json")
+    handler.send_header("Content-Length", str(len(body)))
     handler.end_headers()
     handler.wfile.write(body)
 
@@ -93,7 +96,7 @@ class HTTPTests(unittest.TestCase):
         requests = []
 
         def handle(handler):
-            body = handler.rfile.read(int(handler.headers["Content-Length"]))
+            body = handler.request_body
             requests.append((handler.path, dict(handler.headers), body))
             if handler.path == "/token":
                 respond(handler, b'{"access_token":"synthetic-token","token_type":"Bearer","expires_in":100}')
