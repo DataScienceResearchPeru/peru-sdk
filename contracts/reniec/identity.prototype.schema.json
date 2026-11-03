@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:peru-sdk:reniec:identity:prototype:1",
+  "description": "Prototipo local. No describe el protocolo oficial de RENIEC ni acredita acceso al servicio.",
+  "$defs": {
+    "IdentityQuery": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dni"],
+      "properties": {"dni": {"type": "string", "pattern": "^[0-9]{8}$"}}
+    },
+    "Identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dni", "given_names", "first_surname", "second_surname"],
+      "properties": {
+        "dni": {"type": "string", "pattern": "^[0-9]{8}$"},
+        "given_names": {"type": "string"},
+        "first_surname": {"type": "string"},
+        "second_surname": {"type": "string"}
+      }
+    }
+  }
+}

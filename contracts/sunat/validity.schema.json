@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:peru-sdk:sunat:validity:1",
+  "description": "Contrato inicial para consulta de comprobantes electrónicos; no emite ni determina deducibilidad.",
+  "$defs": {
+    "ValidityQuery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issuer_ruc", "document_type", "series", "number", "issued_on", "amount"],
+      "properties": {
+        "issuer_ruc": {"type": "string", "pattern": "^[0-9]{11}$", "description": "RUC del emisor. Solo se comprueba la estructura localmente."},
+        "document_type": {"type": "string", "pattern": "^[A-Z0-9]{2}$", "description": "Código abierto; los códigos futuros no requieren un enum nuevo."},
+        "series": {"type": "string", "pattern": "^[A-Z0-9]{4}$"},
+        "number": {"type": "integer", "minimum": 1, "maximum": 99999999},
+        "issued_on": {"type": "string", "format": "date", "description": "Fecha civil ISO YYYY-MM-DD; el adaptador la convierte al formato SUNAT."},
+        "amount": {"type": "string", "pattern": "^(0|[1-9][0-9]{0,14})([.][0-9]{1,2})?$", "description": "Decimal exacto; se transmite como número JSON sin pasar por float."}
+      }
+    },
+    "ValidityResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_status", "issuer_status", "issuer_address_status", "observations"],
+      "properties": {
+        "document_status": {"type": "string", "pattern": "^[0-9]+$"},
+        "issuer_status": {"type": "string"},
+        "issuer_address_status": {"type": "string"},
+        "observations": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

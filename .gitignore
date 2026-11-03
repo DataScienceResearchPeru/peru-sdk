@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+.env
+.env.*
+*.pfx
+*.p12
+*.pem
+*.key
+*.test
+coverage.*
