@@ -1,28 +1,18 @@
-# Decisiones iniciales
+# SDKs independientes y contratos compartidos
 
-## Implementación y contrato
+peru-sdk coordina el ecosistema y comprueba integración entre commits concretos. Las implementaciones y credenciales de publicación pertenecen a los repositorios de cada SDK.
 
-Go y Python son implementaciones nativas independientes. No se distribuye un motor compartido ni se ejecutan subprocesos para prestar las operaciones del SDK. Compartimos contratos de datos, procedencia y casos de conformidad, no implementación de negocio.
+- peru-sdk-conformance mantiene los casos sintéticos y su manifiesto de integridad.
+- peru-sdk-models mantiene esquemas, fuentes y generación por lenguaje.
+- peru-sdk-go mantiene el módulo Go, su corpus local y sus releases.
+- peru-sdk-python mantiene el paquete Python, su corpus local y publicación PyPI.
 
-Los modelos se generan desde un subconjunto limitado de JSON Schema 2020-12. El generador es una herramienta de desarrollo escrita en Python y utiliza gofmt; no forma parte de los paquetes instalables. Los adaptadores HTTP, OAuth y normalización de respuesta se implementan en cada lenguaje y se contrastan con el mismo corpus.
+Cada SDK fija commits completos y hashes de los insumos comunes en upstream.lock.json. Los modelos y el corpus se conservan dentro del SDK: instalar, usar o ejecutar sus pruebas nativas no requiere un checkout hermano. Regenerar es una operación explícita de desarrollo, comprobada en un job sin permisos de publicación.
 
-La lógica de emisión fiscal no existe todavía. No creamos un sistema de plugins, un motor de reglas, una ABI o una abstracción universal de instituciones antes de tener casos que los necesiten.
+ecosystem.lock.json fija los componentes comprobados juntos. Una corrección de un SDK puede publicarse independientemente; el lock del hub se actualiza para comprobar la nueva combinación. No es necesario que las versiones públicas coincidan.
 
-## Fronteras
+El verificador descarga cada SDK por commit, construye su distribución y la consume fuera del checkout. También descarga el módulo Go público y ejecuta sus pruebas desde un consumidor externo. Audita archivos para impedir incluir otro SDK en un paquete. Los informes registran commits y hashes.
 
-- Cada cliente recibe su proveedor de token y opciones de transporte. No hay credenciales globales.
-- OAuth de Consulta Integrada se separa del cliente de consulta. Su token se almacena en memoria con renovación sincronizada y margen de expiración.
-- Los errores públicos no incluyen cuerpos remotos, tokens ni secretos. El código institucional, cuando es un string acotado seguro, queda disponible por separado.
-- Los errores de consulta se separan del estado del comprobante. Un código de estado desconocido se conserva.
-- RENIEC tiene una interfaz y un proveedor sintético; la interfaz es provisional hasta conocer el contrato autorizado.
-- No hay reintentos automáticos ni promesa de exactamente una ejecución.
+Los repositorios nuevos permiten merge commits y deshabilitan squash/rebase para conservar las referencias completas fijadas en locks. Si se decide reescribir esas referencias, deben actualizarse los locks y comprobarse la integración.
 
-## Versiones y publicación
-
-El paquete Python empieza en 0.1.0.dev0. Los contratos tienen identificadores propios; su forma actual no es una promesa de estabilidad de producción. Antes de una release se revisarán cambios públicos y se etiquetará el módulo Go con el prefijo de su subdirectorio.
-
-CI verifica paquetes instalados antes de producir distribuciones de prueba. No se configuran tokens de publicación ni un pipeline de publicación a registros que todavía no administramos. La ejecución manual de distribución produce artefactos y hashes para revisión.
-
-## Trabajo pendiente que afecta a decisiones futuras
-
-La comprobación normativa automatizada comienza con un documento descargable. No puede detectar validaciones no publicadas por SUNAT. Las integraciones reales y la vigilancia de otras fuentes se incorporarán como señales separadas de las pruebas locales. Los nuevos lenguajes deberán ejecutar el mismo corpus y conservar su ergonomía propia.
+Se conserva el cliente HTTP SUNAT, autenticación client_credentials, importes exactos y errores diferenciados. RENIEC sigue siendo exclusivamente sintético; emisión UBL y firma permanecen pendientes. La compatibilidad institucional real requiere una comprobación autorizada posterior.

@@ -1,0 +1,24 @@
+{
+  "format_version": 1,
+  "models": {
+    "repository": "peru-sdk-models",
+    "revision": "fbd07a48d26a9094014c94f0dfe2de2cdd0718d7"
+  },
+  "conformance": {
+    "repository": "peru-sdk-conformance",
+    "revision": "96f6b934f2269865d9a524154537f0a579617083",
+    "sha256": "77d947fcb161b763413c85469d05e0a33d4162c4aebd8636c4890d490200d751"
+  },
+  "sdks": {
+    "go": {
+      "repository": "peru-sdk-go",
+      "revision": "a2e43621d7b978b2c36572fdb996c2980437da21",
+      "upstream_lock_sha256": "db906596d6a52a36dd86441c873d42227af610ae1f0cff8d7d50fef25f640aa7"
+    },
+    "python": {
+      "repository": "peru-sdk-python",
+      "revision": "9d93bd023bdc188e22a9616684dfc87cbc691607",
+      "upstream_lock_sha256": "241dd4e54f4d832134189f0fcd37ced39108529a11a69afa2e14aed22e765fad"
+    }
+  }
+}
