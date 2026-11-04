@@ -1,1 +1,2 @@
-jsonschema>=4.23,<5
+build>=1.2,<2
+twine>=6,<8
